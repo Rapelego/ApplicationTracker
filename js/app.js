@@ -9,6 +9,21 @@
 // =========================================
 
 const form = document.getElementById("jobForm");
+// Edit Application Modal Elements
+const editModal = document.getElementById("editModal");
+const editForm = document.getElementById("editForm");
+
+const editCompany = document.getElementById("editCompany");
+const editRole = document.getElementById("editRole");
+const editDate = document.getElementById("editDate");
+const editStatus = document.getElementById("editStatus");
+const editNotes = document.getElementById("editNotes");
+
+const closeModal = document.getElementById("closeModal");
+const cancelEdit = document.getElementById("cancelEdit");
+
+// Stores the ID of the application being edited
+let editingJobId = null;
 const jobsContainer = document.getElementById("jobsContainer");
 const filterButtons = document.querySelectorAll(".filters button");
 const toggle = document.getElementById("darkToggle");
@@ -182,10 +197,37 @@ function renderJobs() {
         date.className = "muted";
         date.textContent = job.application_date;
 
+        const notes = document.createElement("p");
+notes.className = "muted";
+notes.textContent = job.notes || "No notes added.";
+
         div.appendChild(heading);
         div.appendChild(role);
         div.appendChild(badge);
         div.appendChild(date);
+        div.appendChild(notes);
+
+        // Edit application button
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.className = "btn-edit";
+
+        editButton.addEventListener("click", () => {
+            editJob(job);
+        });
+
+        // Delete application button
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "btn-delete";
+
+        deleteButton.addEventListener("click", () => {
+            deleteJob(job.id);
+        });
+
+        // Add buttons to the application card
+        div.appendChild(editButton);
+        div.appendChild(deleteButton);
 
         jobsContainer.appendChild(div);
     });
@@ -244,9 +286,128 @@ function updateStats() {
     ).length;
 }
 
+/* =========================================
+   EDIT APPLICATION
+   Opens the modal and fills in existing details
+========================================= */
+
+function editJob(job) {
+
+    // Store the application ID
+    editingJobId = job.id;
+
+    // Fill the form with the current application details
+    editCompany.value = job.company;
+    editRole.value = job.role;
+    editDate.value = job.application_date;
+    editStatus.value = job.status;
+    editNotes.value = job.notes || "";
+
+    // Display the modal
+    editModal.hidden = false;
+}
+
+
+// =========================================
+// DELETE APPLICATION
+// =========================================
+
+async function deleteJob(jobId) {
+
+    // Ask the user to confirm deletion
+    const confirmDelete = confirm(
+        "Are you sure you want to delete this application?"
+    );
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    // Delete the application from Supabase
+    const { error } = await supabaseClient
+        .from("applications")
+        .delete()
+        .eq("id", jobId);
+
+    if (error) {
+        appMessage.textContent =
+            "Could not delete application: " + error.message;
+        return;
+    }
+
+    appMessage.textContent = "Application deleted successfully!";
+
+    // Refresh the dashboard
+    await loadJobs();
+}
+
+
 // =========================================
 // INITIALISE DASHBOARD
 // =========================================
+/* =========================================
+   CLOSE EDIT APPLICATION MODAL
+========================================= */
 
+// Close using the X button
+closeModal.addEventListener("click", closeEditModal);
+
+// Close using the Cancel button
+cancelEdit.addEventListener("click", closeEditModal);
+
+function closeEditModal() {
+    editModal.hidden = true;
+    editForm.reset();
+    editingJobId = null;
+}
 // Load the signed-in user's applications
 loadJobs();
+
+/* =========================================
+   SAVE EDITED APPLICATION
+========================================= */
+
+editForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!editingJobId) {
+        return;
+    }
+
+    const { data: userData, error: userError } =
+        await supabaseClient.auth.getUser();
+
+    if (userError || !userData.user) {
+        appMessage.textContent = "Please sign in again.";
+        return;
+    }
+
+    const updatedApplication = {
+        company: editCompany.value.trim(),
+        role: editRole.value.trim(),
+        application_date: editDate.value,
+        status: editStatus.value,
+        notes: editNotes.value.trim()
+    };
+
+    const { error } = await supabaseClient
+        .from("applications")
+        .update(updatedApplication)
+        .eq("id", editingJobId)
+        .eq("user_id", userData.user.id);
+
+    if (error) {
+        appMessage.textContent = "Could not update application: " + error.message;
+        return;
+    }
+
+    // Close and reset the modal
+    editModal.hidden = true;
+    editForm.reset();
+    editingJobId = null;
+
+    appMessage.textContent = "Application updated successfully!";
+
+    // Refresh the application list
+    await loadJobs();
+});

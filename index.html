@@ -107,6 +107,66 @@
   </section>
 
 
+<!-- =========================================
+     EDIT APPLICATION MODAL
+========================================= -->
+
+<div class="modal-overlay" id="editModal" hidden>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Edit Application</h2>
+            <button type="button" id="closeModal" class="modal-close">&times;</button>
+        </div>
+
+        <form id="editForm">
+
+            <div class="form-group">
+                <label for="editCompany">Company Name</label>
+                <input type="text" id="editCompany" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editRole">Job Title</label>
+                <input type="text" id="editRole" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editDate">Application Date</label>
+                <input type="date" id="editDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editStatus">Status</label>
+                <select id="editStatus" required>
+                    <option value="Applied">Applied</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="editNotes">Notes</label>
+                <textarea id="editNotes" rows="3"></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelEdit" class="btn-cancel">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn-primary">
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
 <script src="js/auth-guard.js"></script>
