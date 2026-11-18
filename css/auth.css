@@ -1,0 +1,155 @@
+
+/* =========================================
+   CAREERTRACK AUTHENTICATION STYLES
+   Login and registration page
+========================================= */
+
+/* Reset default browser spacing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Main page styling */
+body {
+    font-family: "Inter", sans-serif;
+    background: #f4f7fc;
+    color: #172033;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+/* Main authentication layout */
+.auth-container {
+    width: 100%;
+    max-width: 440px;
+}
+
+/* Brand section */
+.auth-brand {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.auth-brand h1 {
+    font-size: 30px;
+    font-weight: 800;
+    color: #2563eb;
+    letter-spacing: -1px;
+}
+
+.auth-brand p {
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* Authentication card */
+.auth-card {
+    background: #ffffff;
+    padding: 36px;
+    border-radius: 16px;
+    border: 1px solid #e5eaf2;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.06);
+}
+
+.auth-card h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.auth-subtitle {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 28px;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #dbe2ec;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Submit button */
+#loginButton ,
+#signupButton{
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#loginButton:hover,
+#signupButton:hover {
+    background: #1d4ed8;
+}
+
+/* Switch between login and registration */
+.auth-switch {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.auth-switch a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+/* Authentication feedback messages */
+#authMessage {
+    margin-top: 18px;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 26px 22px;
+    }
+
+    .auth-brand h1 {
+        font-size: 26px;
+    }
+}
